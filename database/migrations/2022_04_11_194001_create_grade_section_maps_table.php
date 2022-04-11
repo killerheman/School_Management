@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Section;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,14 +14,20 @@ return new class extends Migration
      */
     public function up()
     {
-        use SoftDeletes;
-        Schema::create('sections', function (Blueprint $table) {
+        Schema::create('grade_section_maps', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->string('description')->nullable();
-            $table->softDeletes();
+            $table->bigInteger('class_id');
+            $table->bigInteger('section_id');
             $table->timestamps();
         });
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(Grade::class,'class_id');
+    }
+    public function section(){
+        return $this->belongsTo(Section::class,'section_id');
     }
 
     /**
@@ -30,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sections');
+        Schema::dropIfExists('grade_section_maps');
     }
 };
